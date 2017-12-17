@@ -2,6 +2,12 @@
 // Include config file
 require_once 'include/config.php';
 
+session_start();
+if(isset($_SESSION['username']) || !empty($_SESSION['username'])){
+  header("location: dashboard.php?id=1");
+  exit();
+}
+
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = "";
@@ -85,6 +91,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
     <style>
     body {
       background-color: #fafafa;
@@ -98,33 +105,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       margin-top: 10%;
       border: 1px solid #333;
     }
+
+
     </style>
   </head>
   <body>
-<div class="loginform">
-<center>
-  <h2>Content Management System</h2>
-  <h4></h4><br><br>
-    <div class="wrapper" style="width:300px">
+<div class="main">
+  <div class="login-form">
+			<h1>Login</h1>
+					<div class="head">
+						<img src="img/user.png" width="132" height="132"/>
+					</div>
+				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+						<input type="text" class="text" name="username" placeholder="USERNAME" />
+            <span class="help-block"><?php echo $username_err; ?></span>
+						<input type="password" name="password" placeholder="PASSWORD"/>
+            <span class="help-block"><?php echo $password_err; ?></span>
+						<div class="submit">
+							<input type="submit" value="LOGIN" >
+					</div>
 
-      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-          <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
-              <label>Username:<sup>*</sup></label>
-              <input type="text" name="username"class="form-control" value="<?php echo $username; ?>">
-              <span class="help-block"><?php echo $username_err; ?></span>
-          </div>
-          <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
-              <label>Password:<sup>*</sup></label>
-              <input type="password" name="password" class="form-control">
-              <span class="help-block"><?php echo $password_err; ?></span>
-          </div>
-          <div class="form-group">
-              <input type="submit" class="btn btn-primary" value="Login">
-              <a href="index.php" class="btn btn-default">Cancel</a>
-          </div>
-      </form>
-  </div>
-</center>
-</div>
+				</form>
+			</div>
+    </div>
   </body>
 </html>

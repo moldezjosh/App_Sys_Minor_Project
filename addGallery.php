@@ -2,6 +2,15 @@
 // Include config file
 require_once 'include/config.php';
 
+// Initialize the session
+session_start();
+
+// If session variable is not set it will redirect to login page
+if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+  header("location: login.php");
+  exit;
+}
+
 // Define variables and initialize with empty values
 $name = "";
 $name_err = "";
@@ -86,26 +95,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link href="css/dashboard.css" rel="stylesheet">
     <body>
 
-      <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.php" target="_blank">View Hotel</a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="dashboard.php?id=1">Dashboard</a></li>
-              <li><a href="about.php">About</a></li>
-              <li><a href="logout.php">Logout</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <?php include 'include/nav.php'; ?>
 
       <div class="container-fluid">
         <div class="row">
@@ -115,7 +105,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               <li><a href="editRoom.php">Room & Suites</a></li>
               <li><a href="editFacilities.php">Facilities</a></li>
               <li class="active"><a href="editGallery.php">Gallery</a></li>
-              
+
             </ul>
           </div>
           <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

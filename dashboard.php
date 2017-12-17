@@ -36,32 +36,57 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         $description = $input_description;
     }
 
-    
-    $image = rand(1000,100000)."-".$_FILES['files']['name'];
-    $filename = $_FILES['files']['name'];
-    $file_loc = $_FILES['files']['tmp_name'];
-    $folder="uploads/";
-
+    if($_FILES['files']['error'] == 0){
+      $file_loc = $_FILES['files']['tmp_name'];
+      list($width, $height, $type, $attr) = getimagesize($file_loc);
+      if($width>='1600' && $height>='900'){
+        $image = "dashboardcover.jpg";
+        $folder="uploads/";
+      }else{
+        ?>
+        <script>
+          // success message
+            alert('Image is too small. Minimum dimensions are 1600x900 pixels.');
+            window.location.href='dashboard.php?id=1';
+        </script>
+        <?php
+        exit();
+      }
+    }
 
     // Check input errors before inserting in database
     if(empty($description_err) && empty($name_err)){
-      // Prepare an update statement
-      $sql = "UPDATE home SET hotel_name=?, hotel_description=?, home_bg=? WHERE home_id=?";
+      if($_FILES['files']['error'] == 0){
+        // Prepare an update statement
+        $sql = "UPDATE home SET hotel_name=?, hotel_description=?, home_bg=? WHERE home_id=?";
+      }else{
+        // Prepare an update statement
+        $sql = "UPDATE home SET hotel_name=?, hotel_description=? WHERE home_id=?";
+      }
 
         if($stmt = mysqli_prepare($link, $sql)){
-
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_description, $param_home_bg, $param_id);
+            if($_FILES['files']['error'] == 0){
+              // Bind variables to the prepared statement as parameters
+              mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_description, $param_home_bg, $param_id);
+            }else{
+              // Bind variables to the prepared statement as parameters
+              mysqli_stmt_bind_param($stmt, "ssi", $param_name, $param_description, $param_id);
+            }
 
             // Set parameters
 						$param_name = $name;
             $param_description = $description;
-            $param_home_bg = $image;
             $param_id = $id;
+            if($_FILES['files']['error'] == 0){
+              $param_home_bg = $image;
+            }
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
+              if($_FILES['files']['error'] == 0){
                 move_uploaded_file($file_loc,$folder.$image);
+              }
+
                 // Records updated successfully. Redirect to landing page
                 ?>
                 <script>
@@ -107,6 +132,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                     // Retrieve individual field value
                     $name = $row["hotel_name"];
                     $description = $row["hotel_description"];
+                    $cover_img = $row['home_bg'];
                 } else{
                     // URL doesn't contain valid id. Redirect to error page
                   header("location: error.php");
@@ -148,26 +174,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     <link href="css/dashboard.css" rel="stylesheet">
     <body>
 
-      <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="index.php" target="_blank">View Hotel</a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="dashboard.php?id=1">Dashboard</a></li>
-              <li><a href="about.php">About</a></li>
-              <li><a href="logout.php">Logout</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+      <?php include 'include/nav.php'; ?>
 
       <div class="container-fluid">
         <div class="row">
@@ -195,7 +202,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                 </div>
 
                 <label class="col-form-label" for="formGroupExampleInput">Upload a Background Image</label>
-                <input type="file" name="files" id="files" accept="image/jpeg" /><br><br>
+                <input type="file" name="files" id="files" accept="image/jpeg"/><br><br>
                 <input type="hidden" name="id" value="<?php echo $id; ?>"/>
 
                 <input type="submit" class="btn btn-primary" value="Update">
@@ -213,11 +220,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
       <script src="js/bootstrap.min.js"></script>
-      <script src="js/javascript.js"></script>
-      <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-      <script src="../../assets/js/vendor/holder.min.js"></script>
-      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-      <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
 
   </body>

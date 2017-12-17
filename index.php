@@ -79,7 +79,6 @@
                  <li><a href="rooms.php">Room & Suites</a></li>
                  <li><a href="facilities.php">Facilities</a></li>
                  <li><a href="gallery.php">Gallery</a></li>
-                 <li><a href="login.php">Login</a></li>
                </ul>
              </nav>
            </div>

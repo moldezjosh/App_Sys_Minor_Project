@@ -17,6 +17,7 @@
     <!-- Custom styles for this template -->
     <link href="css/cover.css" rel="stylesheet">
     <link href="css/footer.css" rel="stylesheet">
+    <link href="css/equal.css" rel="stylesheet">
     <style>
     .site-wrapper {
       background-image: url("img/rooms.jpg");
@@ -43,6 +44,7 @@
       text-shadow: none;
     }
 
+
     </style>
   <body>
 
@@ -61,7 +63,6 @@
                  <li class="active"><a href="rooms.php">Room & Suites</a></li>
                  <li><a href="facilities.php">Facilities</a></li>
                  <li><a href="gallery.php">Gallery</a></li>
-                 <li><a href="login.php">Login</a></li>
                </ul>
              </nav>
            </div>
@@ -89,15 +90,17 @@
    <h2>Rooms & Suites</h2><br>
    <h4><i>High Style and Harbour Living</i></h4>
  </div>
+
    <div class="row text-center slideanim">
+     <div class="row row-eq-height">
      <?php
 
      // Attempt select query execution
-     $sql = "SELECT * FROM rooms ORDER BY room_description ASC";
+     $sql = "SELECT * FROM rooms ORDER BY room_name ASC";
      if($result = mysqli_query($link, $sql)){
          if(mysqli_num_rows($result) > 0) {
            while($row = mysqli_fetch_array($result)){
-             echo "<div class='col-sm-4'>";
+             echo "<div class='col-xs-4'>";
                echo "<div class='thumbnail'>";
                  echo "<img src='uploads/". $row['room_img'] ."' width='400' height='300'><br>";
                  echo "<p><strong>". $row['room_name'] ."</strong></p>";
@@ -113,71 +116,7 @@
  </div>
 </div>
 
-
-       <div class="search-text">
-          <div class="container">
-            <div class="row text-center">
-
-              <div class="form">
-                  <h4>SIGN UP TO OUR NEWSLETTER</h4>
-                   <form id="search-form" class="form-search form-horizontal">
-                       <input type="text" class="input-search" placeholder="Email Address">
-                       <button type="submit" class="btn-search">SUBMIT</button>
-                   </form>
-               </div>
-
-             </div>
-          </div>
-   	</div>
-
-       <footer>
-        <div class="container">
-          <div class="row">
-
-                   <div class="col-md-4 col-sm-6 col-xs-12">
-                     <span class="logo">LOGO</span>
-                   </div>
-
-                   <div class="col-md-4 col-sm-6 col-xs-12">
-                       <ul class="menu">
-                            <span>Menu</span>
-                            <li>
-                               <a href="index.php">Home</a>
-                             </li>
-
-                             <li>
-                                <a href="rooms.php">Room & Suites</a>
-                             </li>
-
-                             <li>
-                               <a href="facilities.php">Facilities</a>
-                             </li>
-
-                             <li>
-                                <a href="gallery.php">Gallery</a>
-                             </li>
-                        </ul>
-                   </div>
-
-                   <div class="col-md-4 col-sm-6 col-xs-12">
-                     <ul class="adress">
-                           <span>Contact</span>
-                           <li>
-                              <i class="fa fa-phone" aria-hidden="true"></i> <a href="#">Phone</a>
-                           </li>
-                           <li>
-                              <i class="fa fa-map-marker" aria-hidden="true"></i> <a href="#">Adress</a>
-                           </li>
-                           <li>
-                              <i class="fa fa-envelope" aria-hidden="true"></i> <a href="#">Email</a>
-                           </li>
-                      </ul>
-                  </div>
-
-
-              </div>
-           </div>
-       </footer>
+    <?php include 'include/footer.php'; ?>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
