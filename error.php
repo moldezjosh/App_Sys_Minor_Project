@@ -31,7 +31,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
                         <h1>Invalid Request</h1>
                     </div>
                     <div class="alert alert-danger fade in">
-                        <p>Sorry, you've made an invalid request. Please <a href="dashboard.php" class="alert-link">go back</a> and try again.</p>
+                        <p>Sorry, you've made an invalid request. Please <a href="dashboard.php?id=1" class="alert-link">go back</a> and try again.</p>
                     </div>
                 </div>
             </div>
